@@ -1,6 +1,6 @@
 from groups.models import Group
 from groups.serializers import GroupSerializer
-from rest_framework import serializers
+from rest_framework import serializers, status
 from traits.models import Trait
 from traits.serializers import TraitSerializer
 
@@ -32,3 +32,43 @@ class AnimalSerializer(serializers.Serializer):
             animal_obj.traits.add(trait)
 
         return animal_obj
+
+    def update(self, instance, validated_data: dict):
+        non_updatable = {"sex", "group", "traits"}
+
+        for key, value in validated_data.items():
+            if key in non_updatable:
+                raise KeyError(
+                    {f"{key}": f"You can not update {key} property."},
+                    status.HTTP_422_UNPROCESSABLE_ENTITY,
+                )
+
+            # elif key == "traits":
+            #     for traits in value:
+            #         trait, _ = traits.objects.get_or_create(**trait)
+            #         instance.traits.add(trait)
+            else:
+                setattr(instance, key, value)
+
+        instance.save()
+
+        return instance
+
+
+#  def update(self, instance, validated_data: dict):
+#         non_updatable = {"sex", "group", "traits"}
+
+#         try:
+#             for key, value in validated_data.items():
+#                 if key in non_updatable:
+
+#                     setattr(instance, key, value)
+
+#         except Http404:
+#             return {
+#                 f"{key}": f"You can not update {key} property."
+#             }, status.HTTP_422_UNPROCESSABLE_ENTITY
+
+#         instance.save()
+
+#         return instance
