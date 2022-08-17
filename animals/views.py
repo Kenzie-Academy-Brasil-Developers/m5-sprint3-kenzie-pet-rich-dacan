@@ -23,6 +23,16 @@ class AnimalView(APIView):
 
 
 class SpecificAnimalView(APIView):
+    def get(self, _: Request, animal_id: int):
+        try:
+            animal = get_object_or_404(Animal, pk=animal_id)
+            serialized = AnimalSerializer(animal)
+
+            return Response(serialized.data, status.HTTP_200_OK)
+
+        except Http404:
+            return Response({"detail": "Animal not found."}, status.HTTP_404_NOT_FOUND)
+
     def patch(self, request: Request, animal_id: int):
         try:
             animal = get_object_or_404(Animal, pk=animal_id)
@@ -32,6 +42,16 @@ class SpecificAnimalView(APIView):
             serialized.save()
 
             return Response(serialized.data, status.HTTP_200_OK)
+
+        except Http404:
+            return Response({"detail": "Animal not found."}, status.HTTP_404_NOT_FOUND)
+
+    def delete(self, _: Request, animal_id: int):
+        try:
+            animal = get_object_or_404(Animal, pk=animal_id)
+            animal.delete()
+
+            return Response("", status.HTTP_204_NO_CONTENT)
 
         except Http404:
             return Response({"detail": "Animal not found."}, status.HTTP_404_NOT_FOUND)

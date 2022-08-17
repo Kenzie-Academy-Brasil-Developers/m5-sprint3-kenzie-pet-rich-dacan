@@ -1,3 +1,5 @@
+import math
+
 from groups.models import Group
 from groups.serializers import GroupSerializer
 from rest_framework import serializers, status
@@ -18,6 +20,7 @@ class AnimalSerializer(serializers.Serializer):
     )
     group = GroupSerializer()
     traits = TraitSerializer(many=True)
+    age_in_human_years = serializers.SerializerMethodField()
 
     def create(self, validated_data: dict):
         group_info = validated_data.pop("group")
@@ -53,6 +56,12 @@ class AnimalSerializer(serializers.Serializer):
         instance.save()
 
         return instance
+
+    def get_age_in_human_years(self, obj: Animal) -> float:
+
+        human_age = round(16 * math.log(obj.age) + 31)
+
+        return human_age
 
 
 #  def update(self, instance, validated_data: dict):
