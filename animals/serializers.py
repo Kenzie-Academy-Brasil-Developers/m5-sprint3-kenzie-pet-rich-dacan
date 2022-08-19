@@ -1,6 +1,9 @@
+import math
+
 from groups.models import Group
 from groups.serializers import GroupSerializer
 from rest_framework import serializers, status
+from rest_framework.exceptions import ValidationError
 from traits.models import Trait
 from traits.serializers import TraitSerializer
 
@@ -18,6 +21,7 @@ class AnimalSerializer(serializers.Serializer):
     )
     group = GroupSerializer()
     traits = TraitSerializer(many=True)
+    age_in_human_years = serializers.SerializerMethodField()
 
     def create(self, validated_data: dict):
         group_info = validated_data.pop("group")
@@ -34,14 +38,11 @@ class AnimalSerializer(serializers.Serializer):
         return animal_obj
 
     def update(self, instance, validated_data: dict):
-        non_updatable = {"sex", "group", "traits"}
+        non_upgradable = {"sex", "group", "traits"}
 
         for key, value in validated_data.items():
-            if key in non_updatable:
-                raise KeyError(
-                    {f"{key}": f"You can not update {key} property."},
-                    status.HTTP_422_UNPROCESSABLE_ENTITY,
-                )
+            if key in non_upgradable:
+                raise ValidationError({f"{key}": f"You can not update {key} property."})
 
             # elif key == "traits":
             #     for traits in value:
@@ -54,13 +55,19 @@ class AnimalSerializer(serializers.Serializer):
 
         return instance
 
+    def get_age_in_human_years(self, obj: Animal) -> float:
+
+        human_age = round(16 * math.log(obj.age) + 31)
+
+        return human_age
+
 
 #  def update(self, instance, validated_data: dict):
 #         non_updatable = {"sex", "group", "traits"}
 
 #         try:
 #             for key, value in validated_data.items():
-#                 if key in non_updatable:
+#                 if key not in non_updatable:
 
 #                     setattr(instance, key, value)
 
