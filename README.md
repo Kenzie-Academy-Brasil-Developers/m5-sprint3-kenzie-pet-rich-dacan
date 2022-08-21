@@ -109,10 +109,11 @@ Animals é a tabela responsavel por armazenar os dados de todos os animais que j
 <br>
 
 <span style="background:green; color: black; font-weight: bold; padding: 2px 5px;">POST</span> **/api/animals/**
+---
 
-Para criarmos um novo animal.
+Rota criada para podermos criar um novo animal.
 
-Corpo da requisição.
+Corpo da requisição:
 
 ```JSON
 {
@@ -127,7 +128,7 @@ Corpo da requisição.
 }
 ```
 
-Resposta da requisição.
+Resposta da requisição:
 
 ```JSON
 {
@@ -154,11 +155,14 @@ Resposta da requisição.
 	"age_in_human_years": 49
 }
 ```
-
+---
 
 <span style="background:purple; color: black; font-weight: bold; padding: 2px 5px;">GET</span> **/api/animals/**
+---
 
-Lista todos os animais cadastrados.
+Rota criada para listar todos os animais cadastrados.
+
+Resposta da requisição:
 
 ```JSON
 [
@@ -248,9 +252,14 @@ Lista todos os animais cadastrados.
 	},
 ```
 
-<span style="background:purple; color: black; font-weight: bold; padding: 2px 5px;">GET</span> **/api/animals/:animal_id**
+---
 
-Lê um animal específico informando o seu id na url.
+<span style="background:purple; color: black; font-weight: bold; padding: 2px 5px;">GET</span> **/api/animals/:animal_id**
+---
+
+Rota criada para ler um animal específico informando o seu id na url.
+
+Resposta da requisição:
 
 ```JSON
 {
@@ -278,18 +287,22 @@ Lê um animal específico informando o seu id na url.
 }
 ```
 
+---
+
 <span style="background:yellow; color: black; font-weight: bold; padding: 2px 5px;">PATCH</span> **/api/animals/:animal_id**
+---
 
-Permite atualizar os dados cadastrais do animal. Será necessário passar o id do animal que será atualizado.
+Rota criada para permitir a atualização dos dados cadastrais do animal. 
+Será necessário passar o id do animal que será atualizado.
 
-Exemplo de corpo da requisição.
+Exemplo de corpo da requisição:
 
 ```JSON
 {
 	"name": "Esmeralda"
 }
 ```
-Exemplo de resposta caso o animal não conste no banco de dados.
+Exemplo de resposta caso o animal não conste no banco de dados:
 
 ```JSON
 {
@@ -298,26 +311,30 @@ Exemplo de resposta caso o animal não conste no banco de dados.
 
 ```
 
-Dados que não poderão ser modificados: "group", "traits" e "sex". 
+### Dados que não poderão ser modificados: "group", "traits" e "sex". 
 Caso haja uma tentativa de alteração destes dados, o seguinte erro será reportado na resposta da requisição:
 
 
 ```JSON
 {
 	"group": "You can not update group property.",
-    "traits": "You can not update traits property.",
-    "sex": "You can not update sex property."
+   	"traits": "You can not update traits property.",
+    	"sex": "You can not update sex property."
 }
 
 
 ```
 
+---
+
 <span style="background:red; color: black; font-weight: bold; padding: 2px 5px;">DELETE</span> **/providers/:provider_id**
+---
 
-Permite deletar os dados cadastrais do animal. Será necessário passar o id do animal que será deletado.
+Rota criada para permitir a deleção total dos dados cadastrais do animal. 
+Será necessário passar o id do animal que será deletado.
 
 
-Exemplo de resposta caso o animal não conste no banco de dados.
+Exemplo de resposta caso o animal não conste no banco de dados:
 
 ```JSON
 {
