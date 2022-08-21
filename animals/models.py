@@ -24,4 +24,4 @@ class Animal(models.Model):
     traits = models.ManyToManyField("traits.Trait", related_name="animals")
 
     def __repr__(self) -> str:
-        return f"Name: {self.name} - Group: {self.group}"
+        return f"Name: {self.name} - Group: {self.group} - Traits: {self.traits}"

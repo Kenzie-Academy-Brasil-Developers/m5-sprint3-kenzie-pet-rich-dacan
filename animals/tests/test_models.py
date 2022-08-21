@@ -1,5 +1,6 @@
 from animals.models import Animal
 from django.core.exceptions import ValidationError
+from django.forms.models import model_to_dict
 from django.test import TestCase
 from groups.models import Group
 from traits.models import Trait
@@ -37,18 +38,18 @@ class AnimalModelTest(TestCase):
         cls.animal_test3 = Animal(**cls.animal_test_sex_incorrect)
 
         # Instanciando grupos
-        cls.group_1_data = {"name": "cão", "scientific_name": "canis familiaris"}
-        cls.group_1 = Group.objects.create(**cls.group_1_data)
+        group_1_data = {"name": "cão", "scientific_name": "canis familiaris"}
+        cls.group_1 = Group.objects.create(**group_1_data)
 
-        cls.group_2_data = {"name": "gato", "scientific_name": "felis catus"}
-        cls.group_2 = Group.objects.create(**cls.group_2_data)
+        group_2_data = {"name": "gato", "scientific_name": "felis catus"}
+        cls.group_2 = Group.objects.create(**group_2_data)
 
         # Instanciando traits
-        cls.trait_1_data = {"name": "pequeno porte"}
-        cls.trait_1 = Trait.objects.create(**cls.trait_1_data)
+        trait_1_data = {"name": "pequeno porte"}
+        cls.trait_1 = Trait.objects.create(**trait_1_data)
 
-        cls.trait_2_data = {"name": "pelo curto"}
-        cls.trait_2 = Trait.objects.create(**cls.trait_2_data)
+        trait_2_data = {"name": "pelo curto"}
+        cls.trait_2 = Trait.objects.create(**trait_2_data)
 
         cls.traits_list = [cls.trait_1, cls.trait_2]
 
@@ -110,3 +111,25 @@ class AnimalModelTest(TestCase):
         self.assertEqual(self.animal_test2.sex, self.default_animal_sex, msg)
 
         print("test_sex_attribute_not_informed: OK 💯✔️")
+
+    def test_relationship_1_N_with_group(self) -> None:
+        self.animal_test1.group = self.group_1
+        self.animal_test1.save()
+
+        self.assertIs(self.animal_test1.group, self.group_1)
+
+        print("test_relationship_1_N_with_group: OK 💯✔️")
+
+    def test_relationship_N_N_with_traits(self) -> None:
+
+        self.animal_test1.group = self.group_1
+        self.animal_test1.save()
+
+        for trait in self.traits_list:
+            self.animal_test1.traits.add(trait)
+
+        self.assertEqual(
+            len(model_to_dict(self.animal_test1)["traits"]), len(self.traits_list)
+        )
+
+        print("test_relationship_N_N_with_traits: OK 💯✔️")
