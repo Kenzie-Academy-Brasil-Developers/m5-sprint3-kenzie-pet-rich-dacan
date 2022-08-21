@@ -133,3 +133,20 @@ class AnimalModelTest(TestCase):
         )
 
         print("test_relationship_N_N_with_traits: OK 💯✔️")
+
+    def test_trait_for_many_animals(self) -> None:
+
+        self.animal_test1.group = self.group_1
+        self.animal_test1.save()
+        self.animal_test1.traits.add(self.trait_1)
+
+        self.animal_test2.group = self.group_1
+        self.animal_test2.save()
+        self.animal_test2.traits.add(self.trait_1)
+
+        animals = [self.animal_test1, self.animal_test2]
+
+        for animal in animals:
+            self.assertIn(self.trait_1, animal.traits.all())
+
+        print("test_trait_for_many_animals: OK 💯✔️")
