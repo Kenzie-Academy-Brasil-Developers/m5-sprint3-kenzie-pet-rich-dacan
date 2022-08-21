@@ -15,7 +15,7 @@ class Animal(models.Model):
         max_length=15, choices=SexAnimals.choices, default=SexAnimals.NOT_INFORMED
     )
 
-    # FK 1:N :satisfied:
+    # FK 1:N
     group = models.ForeignKey(
         "groups.Group", on_delete=models.CASCADE, related_name="animals"
     )
